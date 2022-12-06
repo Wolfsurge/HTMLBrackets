@@ -1,0 +1,19 @@
+html {
+    head {
+        title {
+            "Webpage Title"
+        }
+
+        ~ This is a comment!
+    }
+
+    body {
+        h1 {
+            "Header"
+        }
+
+        p {
+            "Paragraph text."
+        }
+    }
+}
