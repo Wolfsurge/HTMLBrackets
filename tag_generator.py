@@ -44,39 +44,17 @@ class TagGenerator:
             id += self.current_char
             self.advance()
 
+        print(id)
+
         inline = id in tag_lists.INLINE_ELEMENTS
 
+        while self.current_char == " ":
+            self.advance()
+
         content = ''
-        properties = []
+        properties = self.generate_properties()
 
         if not inline:
-            while self.current_char == " ":
-                self.advance()
-
-            ############################
-            #  BEGIN PROPERTY ADDITION #
-            ############################
-            if self.current_char == "[":
-                self.advance()
-
-                while self.current_char != "]":
-                    if self.current_char in " ,":
-                        self.advance()
-
-                    property_id = ""
-                    while self.current_char != "=":
-                        property_id += self.current_char
-                        self.advance()
-
-                    self.advance()
-
-                    value = ""
-                    while not self.current_char in [',', ']']:
-                        value += self.current_char
-                        self.advance()
-
-                    properties.append([property_id, value])
-
             while self.current_char != '{':
                 self.advance()
 
@@ -94,9 +72,9 @@ class TagGenerator:
 
                 self.advance()
 
-            self.advance()
-
             content = content[1:len(content)-1]
+
+        self.advance()
 
         return tag.Tag(id, content, properties, inline = inline)
 
@@ -142,3 +120,29 @@ class TagGenerator:
         self.advance()
 
         return tag.Tag('comment', content, inline = False, formatting = '<!--%content%-->', no_inner_tags = True)
+
+    def generate_properties(self):
+        properties = []
+
+        if self.current_char == "[":
+            self.advance()
+
+            while self.current_char != "]":
+                if self.current_char in " ,":
+                    self.advance()
+
+                property_id = ""
+                while self.current_char != "=":
+                    property_id += self.current_char
+                    self.advance()
+
+                self.advance()
+
+                value = ""
+                while not self.current_char in [',', ']']:
+                    value += self.current_char
+                    self.advance()
+
+                properties.append([property_id, value])
+
+        return properties

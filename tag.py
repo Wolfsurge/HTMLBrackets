@@ -31,4 +31,4 @@ class Tag:
         else:
             final += self.formatting.replace('%name%', self.name).replace('%content%', self.content)
 
-        return final
+        return final + "\n"

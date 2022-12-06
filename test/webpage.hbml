@@ -4,11 +4,22 @@ html {
             "Webpage Title"
         }
 
+        link [rel="stylesheet" href="style.css"]
+
         ~ This is a comment!
     }
 
     body {
-        a [href="https://www.youtube.com/", target="_blank"] { "Header" }
-        p { "Paragraph text." }
+        p {
+            "Paragraph text. "
+
+            a [href="https://www.youtube.com/", target="_blank"] {
+                "Header"
+            }
+        }
+
+        div [class="test-div"] {
+            "Inside div!"
+        }
     }
 }
