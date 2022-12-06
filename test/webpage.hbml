@@ -8,12 +8,7 @@ html {
     }
 
     body {
-        h1 {
-            "Header"
-        }
-
-        p {
-            "Paragraph text."
-        }
+        a [href="https://www.youtube.com/", target="_blank"] { "Header" }
+        p { "Paragraph text." }
     }
 }

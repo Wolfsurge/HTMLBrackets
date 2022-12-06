@@ -1,9 +1,10 @@
 import tag_generator
 
 class Tag:
-    def __init__(self, name, content, inline = False, formatting = None, no_inner_tags = False):
+    def __init__(self, name, content, properties = [], inline = False, formatting = None, no_inner_tags = False):
         self.name = name
         self.content = content
+        self.properties = properties
         self.inline = inline
         self.formatting = formatting
         self.no_inner_tags = no_inner_tags
@@ -16,6 +17,9 @@ class Tag:
 
         if not self.formatting:
             final = f'<{self.name}'
+
+            for property in self.properties:
+                final += f"{ ' ' if not property[0].startswith(' ') else '' }{property[0]}={property[1]}"
 
             final += f'{ "/" if self.inline else "" }>'
 
