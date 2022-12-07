@@ -73,33 +73,7 @@ class TagGenerator:
 
         # add inner tags if it isn't inline.
         if not inline:
-            # skip to opening brace
-            while self.current_char != settings.INNER_LEFT_BRACE:
-                self.advance()
-
-            # brace stack. should end on 0.
-            stack = 0
-
-            while self.current_char != None:
-                # push one to stack
-                if self.current_char == settings.INNER_LEFT_BRACE:
-                    stack += 1
-
-                # remove one from stack
-                elif self.current_char == settings.INNER_RIGHT_BRACE:
-                    stack -= 1
-
-                content += self.current_char
-
-                # break out of loop when we have reached the correct closing brace
-                if self.current_char == settings.INNER_RIGHT_BRACE and stack == 0:
-                    break
-
-                # advance to next position.
-                self.advance()
-
-            # trim content by one character on either side.
-            content = content[1:len(content)-1]
+            content = self.generate_content()
 
         self.advance()
 
@@ -201,3 +175,40 @@ class TagGenerator:
                 properties.append([property_id, value])
 
         return properties
+
+    def generate_content(self) -> str:
+        """
+        Generates the content inside of braces.
+        :return: The content inside of the braces, as a string.
+        """
+        content = ''
+
+        # skip to opening brace
+        while self.current_char != settings.INNER_LEFT_BRACE:
+            self.advance()
+
+        # brace stack. should end on 0.
+        stack = 0
+
+        while self.current_char != None:
+            # push one to stack
+            if self.current_char == settings.INNER_LEFT_BRACE:
+                stack += 1
+
+            # remove one from stack
+            elif self.current_char == settings.INNER_RIGHT_BRACE:
+                stack -= 1
+
+            content += self.current_char
+
+            # break out of loop when we have reached the correct closing brace
+            if self.current_char == settings.INNER_RIGHT_BRACE and stack == 0:
+                break
+
+            # advance to next position.
+            self.advance()
+
+        # trim content by one character on either side.
+        content = content[1:len(content) - 1]
+
+        return content

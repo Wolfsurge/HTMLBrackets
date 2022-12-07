@@ -49,5 +49,4 @@ class Tag:
             # add tag with our custom formatting
             final += self.formatting.replace('%name%', self.name).replace('%content%', self.content)
 
-        # return with a new line
-        return final + "\n"
+        return final

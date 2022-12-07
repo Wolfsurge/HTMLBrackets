@@ -6,7 +6,7 @@ html {
 
     body {
         p [class="paragraph"] {
-            "Text inside the paragraph!"
+            "Text inside the paragraph! <br>"
 
             a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
                 "Anchor text!"
