@@ -1,10 +1,5 @@
 import string
 
-VOID_ELEMENTS = [
-    "br",
-    "hr"
-]
-
 INLINE_ELEMENTS = [
     "br",
     "link"

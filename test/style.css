@@ -1,3 +1,9 @@
 .test-div {
     color: blue;
+    transition: 0.5s;
+}
+
+.test-div:hover {
+    font-size: 50px;
+    color: red;
 }
