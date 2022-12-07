@@ -5,11 +5,10 @@ import string
 import settings
 
 class TagGenerator:
-    def __init__(self, file_name, markup):
-        self.file_name = file_name
+    def __init__(self, markup):
         self.markup = markup
 
-        self.position = position.Position(-1, 0, -1, file_name, markup)
+        self.position = position.Position(-1, 0, -1, markup)
 
         self.current_char = None
         self.advance()
@@ -40,8 +39,8 @@ class TagGenerator:
             elif self.current_char in tag_lists.VALID_CHARACTERS:
                 tags.append(self.generate_tag())
             else:
-                print(f'Invalid character at line {self.position.line_number}, column {self.position.column}')
-                break
+                print('Note - file is broken!')
+                return None
 
         return tags
 

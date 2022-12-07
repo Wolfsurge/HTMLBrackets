@@ -1,9 +1,8 @@
 class Position:
-    def __init__(self, index, line_number, column, file_name, content):
+    def __init__(self, index, line_number, column, content):
         self.index = index
         self.line_number = line_number
         self.column = column
-        self.file_name = file_name
         self.content = content
 
     def advance(self, current_char = None):
@@ -26,4 +25,4 @@ class Position:
         Copies the current position to a new, separate object.
         :return: The copied position.
         """
-        return Position(self.index, self.line_number, self.column, self.file_name, self.content)
+        return Position(self.index, self.line_number, self.column, self.content)

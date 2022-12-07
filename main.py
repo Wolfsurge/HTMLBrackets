@@ -4,7 +4,7 @@ def main() -> None:
     input_file = input("File name: \n> ") # "test/webpage.hbml"
 
     # generate html tags
-    tags = tag_generator.TagGenerator('shell', open(input_file, 'r').read()).make_tags()
+    tags = tag_generator.TagGenerator(open(input_file, 'r').read()).make_tags()
 
     # overwrite html file
     with open(input_file.replace('.hbml', '.html'), 'w') as f:

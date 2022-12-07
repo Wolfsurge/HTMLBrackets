@@ -13,7 +13,11 @@ class Tag:
         # this is because comments and other elements also use this tag system,
         # but they obviously can't have inner elements.
         if not self.no_inner_tags:
-            self.inner_tags = tag_generator.TagGenerator(name, content).make_tags()
+            self.inner_tags = tag_generator.TagGenerator(content).make_tags()
+
+            if self.inner_tags == None:
+                print(f"Invalid syntax in {self.name} {'{}'}")
+                self.inner_tags = []
 
     def generate_html(self) -> str:
         """
