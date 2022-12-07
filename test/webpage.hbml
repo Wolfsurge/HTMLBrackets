@@ -1,16 +1,13 @@
 html {
     head {
         link [rel="stylesheet", href="style.css"]
-        ~ This is a comment!
     }
 
     body {
-        p [class="paragraph"] {
-            "Text inside the paragraph! <br>"
+        a [href="https://github.com/Wolfsurge/HTMLBrackets"] { "Anchor Text" }
 
-            a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
-                "Anchor text!"
-            }
+        p [class="paragraph"] {
+            "Text inside the paragraph"
         }
     }
 }

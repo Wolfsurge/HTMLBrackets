@@ -1,5 +1,6 @@
 import string
 
+# elements that cannot have inner tags
 INLINE_ELEMENTS = [
     "area",
     "base",

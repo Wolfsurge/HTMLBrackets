@@ -69,7 +69,7 @@ class TagGenerator:
         content = ''
 
         # the tags properties (href, class, etc...)
-        properties = self.generate_properties()
+        properties = self.generate_attributes()
 
         # add inner tags if it isn't inline.
         if not inline:
@@ -138,43 +138,43 @@ class TagGenerator:
 
         return tag.Tag('comment', content, inline = False, formatting = '<!--%content%-->', no_inner_tags = True)
 
-    def generate_properties(self) -> []:
+    def generate_attributes(self) -> []:
         """
-        Generates the properties of a tag
-        :return: A 2D array of properties - name, and value.
+        Generates the attributes of a tag
+        :return: A 2D array of attributes - name, and value.
         """
-        properties = []
+        attributes = []
 
-        # we are adding properties
-        if self.current_char == settings.PROPERTY_LEFT_BRACE:
+        # we are adding attributes
+        if self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
             self.advance()
 
-            # we haven't hit the end of our properties
-            while self.current_char != settings.PROPERTY_RIGHT_BRACE:
-                # whitespace or property separator
+            # we haven't hit the end of our attributes
+            while self.current_char != settings.ATTRIBUTE_RIGHT_BRACE:
+                # whitespace or attribute separator
                 if self.current_char in " ,":
                     self.advance()
 
-                # property name
-                property_id = ""
+                # attribute name
+                attribute_id = ""
                 while not self.current_char in "=":
-                    property_id += self.current_char
+                    attribute_id += self.current_char
                     self.advance()
 
                 self.advance()
 
-                # property value
+                # attribute value
                 value = ""
 
                 # we haven't reached a separator or an ending brace
-                while not self.current_char in [',', settings.PROPERTY_RIGHT_BRACE]:
+                while not self.current_char in [',', settings.ATTRIBUTE_RIGHT_BRACE]:
                     value += self.current_char
                     self.advance()
 
                 # add to list
-                properties.append([property_id, value])
+                attributes.append([attribute_id, value])
 
-        return properties
+        return attributes
 
     def generate_content(self) -> str:
         """
