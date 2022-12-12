@@ -8,12 +8,13 @@ class Tag:
         self.inline = inline
         self.formatting = formatting
         self.no_inner_tags = no_inner_tags
-
+        self.inner_tags = []
+        
         # only generate tags if we want to have inner tags.
         # this is because comments and other elements also use this tag system,
         # but they obviously can't have inner elements.
         if not self.no_inner_tags:
-            self.inner_tags = tag_generator.TagGenerator(content).make_tags()
+            self.inner_tags = tag_generator.TagGenerator(content, name).make_tags()
 
             if self.inner_tags == None:
                 print(f"Invalid syntax in {self.name} {'{}'}")
@@ -36,7 +37,7 @@ class Tag:
                 final += f" {property[0].strip()}={property[1].strip()}"
 
             # add closing arrow
-            final += f'{ "/" if self.inline else "" }>'
+            final += f'{ "/" if self.inline else "" }>\n'
 
             # generate inner html tags
             for t in self.inner_tags:

@@ -1,3 +1,9 @@
-.paragraph {
-    color: rgb(17, 128, 255);
+.header {
+    color: blue;
+    transition: 0.5s;
+}
+
+.header:hover {
+    color: cyan;
+    font-size: 50px;
 }

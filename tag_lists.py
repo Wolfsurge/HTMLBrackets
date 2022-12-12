@@ -18,4 +18,9 @@ INLINE_ELEMENTS = [
     "wbr"
 ]
 
+# elements that have a body, but NOT tags
+TAG_EXCLUDED_ELEMENTS = [
+    "script"
+]
+
 VALID_CHARACTERS = string.ascii_letters + '0123456789'

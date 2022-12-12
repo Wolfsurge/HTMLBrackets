@@ -7,9 +7,9 @@ def main() -> None:
     tags = tag_generator.TagGenerator(open(input_file, 'r').read()).make_tags()
 
     # overwrite html file
-    with open(input_file.replace('.hbml', '.html'), 'w') as f:
-        f.write(concatenate_tag_list(tags))
-        f.close()
+    with open(input_file.replace('.hbml', '.html'), 'w') as file:
+        file.write(concatenate_tag_list(tags))
+        file.close()
 
     print(f"Wrote HTML output to {input_file.replace('.hbml', '.html')}")
 

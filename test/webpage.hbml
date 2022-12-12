@@ -1,13 +1,24 @@
 html {
-    head {
-        link [rel="stylesheet", href="style.css"]
-    }
-
-    body {
-        a [href="https://github.com/Wolfsurge/HTMLBrackets"] { "Anchor Text" }
-
-        p [class="paragraph"] {
-            "Text inside the paragraph"
-        }
-    }
+	head {
+        link [rel = "stylesheet", href = "style.css"]
+        ~Test comment
+	}
+	
+	body {
+		h1 [class = "header"] {
+			"Header!"
+		}
+		
+		p {
+			"Paragraph!"
+		}
+		
+		a [href = "https:github.com/Wolfsurge/HTMLBrackets"] {
+			"Text"
+		}
+		
+		script {
+			alert("useless alert to show that JS works")
+		}
+	}
 }

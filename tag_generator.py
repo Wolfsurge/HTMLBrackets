@@ -5,8 +5,9 @@ import string
 import settings
 
 class TagGenerator:
-    def __init__(self, markup):
+    def __init__(self, markup, name = ""):
         self.markup = markup
+        self.name = name
 
         self.position = position.Position(-1, 0, -1, markup)
 
@@ -27,11 +28,16 @@ class TagGenerator:
         """
         tags = []
 
+        if self.name in tag_lists.TAG_EXCLUDED_ELEMENTS:
+            tags.append(tag.Tag("str", self.markup, inline = False, formatting = "%content%\n", no_inner_tags = True))
+            
+            return tags
+        
         while self.current_char != None:
             if self.current_char in ' \t':
                 self.advance()
-            elif self.current_char in '~':
-                tags.append(self.generate_comment())
+            elif self.current_char in settings.COMMENT_INDICATOR:
+                self.generate_comment(tags)
             elif self.current_char == '"':
                 tags.append(self.generate_string())
             elif self.current_char == '\n':
@@ -118,9 +124,10 @@ class TagGenerator:
         self.advance()
 
         # return the string object
-        return tag.Tag("str", string, inline = False, formatting = "%content%", no_inner_tags = True)
+        # essentially just plain text
+        return tag.Tag("str", string, inline = False, formatting = "%content%\n", no_inner_tags = True)
 
-    def generate_comment(self):
+    def generate_comment(self, tags):
         """
         Generates a comment tag
         :return: A comment tag object
@@ -135,9 +142,10 @@ class TagGenerator:
             self.advance()
 
         self.advance()
-
-        return tag.Tag('comment', content, inline = False, formatting = '<!--%content%-->', no_inner_tags = True)
-
+        
+        if not settings.IGNORE_COMMENTS:
+            tags.append(tag.Tag('comment', content, inline = False, formatting = '<!--%content%-->', no_inner_tags = True))
+            
     def generate_attributes(self) -> []:
         """
         Generates the attributes of a tag
