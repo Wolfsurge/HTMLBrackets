@@ -96,13 +96,17 @@ class TagGenerator:
         # the tag's attributes (href, class, etc...)
         attributes = self.generate_attributes()
 
-        # add inner tags if it isn't inline.
+        if settings.DEBUG:
+            print(f'{id}\'s attributes: {attributes}')
+
+        # add content if it isn't inline.
         if not inline:
             if settings.DEBUG:
                 print(f'Generating content for {id}')
 
             content = self.generate_content()
 
+        if not inline or len(attributes) > 0:
             self.advance()
 
         # return tag object.

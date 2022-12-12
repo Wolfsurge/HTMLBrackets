@@ -16,4 +16,4 @@ IGNORE_COMMENTS = True
 SINGLE_LINE_TAG_INDICATOR = '>'
 
 # Whether to output messages about what the parser is currently doing
-DEBUG = False
+DEBUG = True

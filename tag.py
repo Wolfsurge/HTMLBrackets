@@ -1,3 +1,4 @@
+import settings
 import tag_generator
 
 class Tag:
@@ -18,6 +19,13 @@ class Tag:
 
             if self.inner_tags == None:
                 self.inner_tags = []
+            elif settings.DEBUG:
+                tags = ""
+
+                for tag in self.inner_tags:
+                    tags += tag.name
+
+                print(f'{name}\'s tags: {tags}')
 
     def generate_html(self) -> str:
         """
