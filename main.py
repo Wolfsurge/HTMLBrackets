@@ -1,10 +1,15 @@
-import tag, tag_generator
+import tag
+import tag_generator
+import settings
 
 def main() -> None:
     input_file = input("File name: \n> ") # "test/webpage.hbml"
 
     # generate html tags
     tags = tag_generator.TagGenerator(open(input_file, 'r').read()).make_tags()
+
+    if settings.DEBUG:
+        print("Writing HTML output to file...")
 
     # overwrite html file
     with open(input_file.replace('.hbml', '.html'), 'w') as file:
@@ -17,6 +22,9 @@ def concatenate_tag_list(list: []) -> str:
     """
     Concatenates a list of tag objects into a string
     """
+    if settings.DEBUG:
+        print("Concatenating tags...")
+
     output = ""
 
     # add to output

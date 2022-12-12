@@ -1,7 +1,7 @@
 html {
 	head {
         link [rel = "stylesheet", href = "style.css"]
-        ~Test comment
+        ~ Test comment
 	}
 	
 	body {
@@ -10,15 +10,16 @@ html {
 		}
 		
 		p {
-			"Paragraph!"
+			"Paragraph!" br br "Test paragraph 1"
+			"Test paragraph 2"
 		}
 		
-		a [href = "https:github.com/Wolfsurge/HTMLBrackets"] {
-			"Text"
-		}
-		
+		a [href = "https:github.com/Wolfsurge/HTMLBrackets"] > "Anchor Text"
+
 		script {
-			alert("useless alert to show that JS works")
+			function test() {
+			    alert("alert")
+			}
 		}
 	}
 }

@@ -29,23 +29,36 @@ class TagGenerator:
         tags = []
 
         if self.name in tag_lists.TAG_EXCLUDED_ELEMENTS:
-            tags.append(tag.Tag("str", self.markup, inline = False, formatting = "%content%\n", no_inner_tags = True))
+            if settings.DEBUG:
+                print("Excluded element found, overriding tag generation...")
+
+            tags.append(tag.Tag("str", self.markup, inline = False, formatting = "%content%", no_inner_tags = True))
             
             return tags
         
         while self.current_char != None:
             if self.current_char in ' \t':
                 self.advance()
-            elif self.current_char in settings.COMMENT_INDICATOR:
+
+            elif self.current_char == settings.COMMENT_INDICATOR[0] and self.equals_symbol(settings.COMMENT_INDICATOR):
+                if settings.DEBUG:
+                    print("Generating comment...")
+
                 self.generate_comment(tags)
+
             elif self.current_char == '"':
+                if settings.DEBUG:
+                    print("Generating string...")
+
                 tags.append(self.generate_string())
+
             elif self.current_char == '\n':
                 self.advance()
+
             elif self.current_char in tag_lists.VALID_CHARACTERS:
                 tags.append(self.generate_tag())
+
             else:
-                print('Note - file is broken!')
                 return None
 
         return tags
@@ -67,24 +80,33 @@ class TagGenerator:
         # check if element is inline (doesn't need a closing tag)
         inline = id in tag_lists.INLINE_ELEMENTS
 
+        if settings.DEBUG:
+            print(f"{id} is {'inline' if inline else 'not inline'}")
+
         # skip whitespaces
-        while self.current_char == " ":
+        while self.current_char == ' ':
             self.advance()
 
         # the content inside of the tag
         content = ''
 
-        # the tags properties (href, class, etc...)
-        properties = self.generate_attributes()
+        if settings.DEBUG:
+            print(f'Generating attributes for {id}')
+
+        # the tag's attributes (href, class, etc...)
+        attributes = self.generate_attributes()
 
         # add inner tags if it isn't inline.
         if not inline:
+            if settings.DEBUG:
+                print(f'Generating content for {id}')
+
             content = self.generate_content()
 
-        self.advance()
+            self.advance()
 
         # return tag object.
-        return tag.Tag(id, content, properties, inline = inline)
+        return tag.Tag(id, content, attributes, inline = inline)
 
     def generate_string(self):
         """
@@ -125,7 +147,7 @@ class TagGenerator:
 
         # return the string object
         # essentially just plain text
-        return tag.Tag("str", string, inline = False, formatting = "%content%\n", no_inner_tags = True)
+        return tag.Tag("str", string, inline = False, formatting = "%content%", no_inner_tags = True)
 
     def generate_comment(self, tags):
         """
@@ -136,7 +158,7 @@ class TagGenerator:
 
         self.advance()
 
-        # Not a new line, and not a null character
+        # not a new line, and not a null character
         while self.current_char != '\n' and self.current_char != None:
             content += self.current_char
             self.advance()
@@ -193,6 +215,9 @@ class TagGenerator:
 
         # skip to opening brace
         while self.current_char != settings.INNER_LEFT_BRACE:
+            if self.current_char == settings.SINGLE_LINE_TAG_INDICATOR[0] and self.equals_symbol(settings.SINGLE_LINE_TAG_INDICATOR):
+                return self.generate_single_line_tag()
+
             self.advance()
 
         # brace stack. should end on 0.
@@ -220,3 +245,33 @@ class TagGenerator:
         content = content[1:len(content) - 1]
 
         return content
+
+    def generate_single_line_tag(self) -> str:
+        """
+        Generates a single lined tag
+        :return: The content
+        """
+
+        content = ''
+
+        while self.current_char != '\n':
+            # add char to content
+            content += self.current_char
+            self.advance()
+
+        return content
+
+    def equals_symbol(self, symbol: str) -> bool:
+        """
+        Checks if the forecoming text equals the given symbol
+        :param symbol: The symbol to check against
+        :return: Whether the forecoming text is equal to the symbol
+        """
+        current = ''
+
+        # add char until we reach a whitespace
+        while self.current_char != None and self.current_char != ' ':
+            current += self.current_char
+            self.advance()
+
+        return current == symbol

@@ -17,7 +17,6 @@ class Tag:
             self.inner_tags = tag_generator.TagGenerator(content, name).make_tags()
 
             if self.inner_tags == None:
-                print(f"Invalid syntax in {self.name} {'{}'}")
                 self.inner_tags = []
 
     def generate_html(self) -> str:
@@ -37,7 +36,7 @@ class Tag:
                 final += f" {property[0].strip()}={property[1].strip()}"
 
             # add closing arrow
-            final += f'{ "/" if self.inline else "" }>\n'
+            final += f'{ "/" if self.inline else "" }>'
 
             # generate inner html tags
             for t in self.inner_tags:
