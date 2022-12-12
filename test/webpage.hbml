@@ -1,24 +1,20 @@
 html {
-	head {
+    head {
         link [rel="stylesheet", href="style.css"]
-	}
-	
-	body {
-		h1 [class = "header"] {
-			"Header!"
-		}
-		
-		p {
-			"Paragraph!" br br "Test paragraph 1"
-			"Test paragraph 2"
-		}
-		
-		a [href = "https:github.com/Wolfsurge/HTMLBrackets"] > "Anchor Text"
+        ~ This is a comment!
+    }
 
-		script {
-			function test() {
-			    alert("alert")
-			}
-		}
-	}
+    body {
+        p [class="paragraph"] {
+            "Text inside the paragraph!"
+
+            br
+
+            a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+                "Anchor text!"
+            }
+        }
+
+        p > "Single lined tag!"
+    }
 }

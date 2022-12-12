@@ -19,10 +19,29 @@ p {
 }
 ```
 
+Alternatively, if there is only one line inside of the braces, we can use single line tags:
+```
+p > "Single lined tag!"
+```
+
 When you want to specify attributes, such as `class` or `href`, we use square braces:
 ```
 p [class="paragraph"] {
     "Text inside the paragraph!"
+    
+    a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+        "Anchor text!"
+    }
+}
+```
+
+Now, this would display the anchor next to the paragraph, without any spacing. So, lets use a `br` tag
+to separate them:
+```
+p [class="paragraph"] {
+    "Text inside the paragraph!"
+    
+    br
     
     a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
         "Anchor text!"
@@ -40,7 +59,7 @@ Comments can be declared with the '~' symbol:
 ~ This is a comment!
 ```
 
-So, all together, it would look like this, as `html`, `head`, and `body' tags also exist:
+So, all together, it would look like this, as `html`, `head`, and `body` tags also exist:
 ```
 html {
     head {
@@ -52,10 +71,14 @@ html {
         p [class="paragraph"] {
             "Text inside the paragraph!"
             
+            br
+            
             a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
                 "Anchor text!"
             }
         }
+        
+        p > "Single lined tag!"
     }
 }
 ```
