@@ -23,7 +23,7 @@ class Tag:
                 tags = ""
 
                 for tag in self.inner_tags:
-                    tags += f'{tag.name}'
+                    tags += f'{tag.name} '
 
                 print(f'{name}\'s tags: {tags}')
 
