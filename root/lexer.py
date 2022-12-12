@@ -1,16 +1,17 @@
 import tag
 import position
 import tag_lists
-import string
 import settings
 
-class TagGenerator:
-    def __init__(self, markup, name = ""):
+class Lexer:
+    def __init__(self, markup, name = "", line: int = 0):
         self.markup = markup
         self.name = name
+        self.line = line
 
         self.position = position.Position(-1, 0, -1, markup)
 
+        self.brace_stack = 0
         self.current_char = None
         self.advance()
 
@@ -18,6 +19,12 @@ class TagGenerator:
         """
         Advances the current position by 1.
         """
+        if self.current_char == settings.INNER_LEFT_BRACE or self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
+            self.brace_stack += 1
+
+        if self.current_char == settings.INNER_RIGHT_BRACE or self.current_char == settings.ATTRIBUTE_RIGHT_BRACE:
+            self.brace_stack -= 1
+
         self.position.advance(self.current_char)
         self.current_char = self.markup[self.position.index] if self.position.index < len(self.markup) else None
 
@@ -32,7 +39,7 @@ class TagGenerator:
             if settings.DEBUG:
                 print("Excluded element found, overriding tag generation...")
 
-            tags.append(tag.Tag("str", self.markup, inline = False, formatting = "%content%", no_inner_tags = True))
+            tags.append(tag.Tag("str", self.markup, self.line, inline = False, formatting ="%content%", no_inner_tags = True))
             
             return tags
         
@@ -59,7 +66,11 @@ class TagGenerator:
                 tags.append(self.generate_tag())
 
             else:
-                return None
+                print("Invalid char detected")
+                quit(-1)
+
+        if self.brace_stack != 0:
+            raise Exception(f"Brace {'overflow' if self.brace_stack > 0 else 'underflow'} by {self.brace_stack}")
 
         return tags
 
@@ -110,7 +121,7 @@ class TagGenerator:
             self.advance()
 
         # return tag object.
-        return tag.Tag(id, content, attributes, inline = inline)
+        return tag.Tag(id, content, self.line, attributes, inline = inline)
 
     def generate_string(self):
         """
@@ -127,6 +138,8 @@ class TagGenerator:
             'n': '\n',
             't': '\t'
         }
+
+        quotation_marks = 1
 
         # we want to continue adding to the string
         while self.current_char != None and (self.current_char != '"' or escape_character):
@@ -147,11 +160,17 @@ class TagGenerator:
 
             escape_character = False
 
+        if self.current_char == '"':
+            quotation_marks -= 1
+
+        if quotation_marks != 0:
+            raise Exception(f"Missing quotation mark")
+
         self.advance()
 
         # return the string object
         # essentially just plain text
-        return tag.Tag("str", string, inline = False, formatting = "%content%", no_inner_tags = True)
+        return tag.Tag("str", string, self.line, inline = False, formatting ="%content%", no_inner_tags = True)
 
     def generate_comment(self, tags):
         """
@@ -170,7 +189,8 @@ class TagGenerator:
         self.advance()
         
         if not settings.IGNORE_COMMENTS:
-            tags.append(tag.Tag('comment', content, inline = False, formatting = '<!--%content%-->', no_inner_tags = True))
+            tags.append(
+                tag.Tag('comment', content, self.line, inline = False, formatting ='<!--%content%-->', no_inner_tags = True))
             
     def generate_attributes(self) -> []:
         """
@@ -219,7 +239,8 @@ class TagGenerator:
 
         # skip to opening brace
         while self.current_char != settings.INNER_LEFT_BRACE:
-            if self.current_char == settings.SINGLE_LINE_TAG_INDICATOR[0] and self.equals_symbol(settings.SINGLE_LINE_TAG_INDICATOR):
+            if self.current_char == settings.SINGLE_LINE_TAG_INDICATOR[0] and self.equals_symbol(
+                    settings.SINGLE_LINE_TAG_INDICATOR):
                 return self.generate_single_line_tag()
 
             self.advance()

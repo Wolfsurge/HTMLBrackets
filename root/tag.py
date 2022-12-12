@@ -1,11 +1,11 @@
 import settings
-import tag_generator
+import lexer
 
 class Tag:
-    def __init__(self, name, content, properties = [], inline = False, formatting = None, no_inner_tags = False):
+    def __init__(self, name, content, line: int, attributes = [], inline = False, formatting = None, no_inner_tags = False):
         self.name = name
         self.content = content
-        self.properties = properties
+        self.attributes = attributes
         self.inline = inline
         self.formatting = formatting
         self.no_inner_tags = no_inner_tags
@@ -15,15 +15,15 @@ class Tag:
         # this is because comments and other elements also use this tag system,
         # but they obviously can't have inner elements.
         if not self.no_inner_tags:
-            self.inner_tags = tag_generator.TagGenerator(content, name).make_tags()
+            self.inner_tags = lexer.Lexer(content, name, line=line).make_tags()
 
             if self.inner_tags == None:
                 self.inner_tags = []
             elif settings.DEBUG:
-                tags = ""
+                tags = []
 
                 for tag in self.inner_tags:
-                    tags += f'{tag.name} '
+                    tags.append(tag.name)
 
                 print(f'{name}\'s tags: {tags}')
 
@@ -40,7 +40,7 @@ class Tag:
             final = f'<{self.name}'
 
             # add properties (href, class, etc...)
-            for property in self.properties:
+            for property in self.attributes:
                 final += f" {property[0].strip()}={property[1].strip()}"
 
             # add closing arrow

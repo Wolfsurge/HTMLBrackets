@@ -5,6 +5,10 @@ html {
     }
 
     body {
+        h1 [class="header"] {
+            u > "Header!"
+        }
+
         p [class="paragraph"] {
             "Text inside the paragraph!"
 
