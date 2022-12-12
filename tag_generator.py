@@ -258,7 +258,7 @@ class TagGenerator:
 
         content = ''
 
-        while self.current_char != '\n':
+        while self.current_char != None and self.current_char != '\n':
             # add char to content
             content += self.current_char
             self.advance()
