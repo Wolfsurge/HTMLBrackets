@@ -9,8 +9,7 @@ html {
 		}
 		
 		p {
-			"Paragraph!" br br
-			"Test paragraph 1"
+			"Paragraph!" br br "Test paragraph 1"
 			"Test paragraph 2"
 		}
 		

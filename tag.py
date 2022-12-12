@@ -23,7 +23,7 @@ class Tag:
                 tags = ""
 
                 for tag in self.inner_tags:
-                    tags += tag.name
+                    tags += f'{tag.name}'
 
                 print(f'{name}\'s tags: {tags}')
 
@@ -46,6 +46,10 @@ class Tag:
             # add closing arrow
             final += f'{ "/" if self.inline else "" }>'
 
+            # add optional new lines if the tag is NOT inline
+            if settings.NEW_LINE_OUTPUT and not self.inline:
+                final += '\n'
+
             # generate inner html tags
             for t in self.inner_tags:
                 final += t.generate_html()
@@ -57,4 +61,5 @@ class Tag:
             # add tag with our custom formatting
             final += self.formatting.replace('%name%', self.name).replace('%content%', self.content)
 
-        return final
+        # add optional new lines
+        return final + ('\n' if settings.NEW_LINE_OUTPUT else '')
