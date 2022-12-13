@@ -4,10 +4,9 @@ import tag_lists
 import settings
 
 class Lexer:
-    def __init__(self, markup, name = "", line: int = 0):
+    def __init__(self, markup, name = ""):
         self.markup = markup
         self.name = name
-        self.line = line
 
         self.position = position.Position(-1, 0, -1, markup)
 
@@ -39,7 +38,7 @@ class Lexer:
             if settings.DEBUG:
                 print("Excluded element found, overriding tag generation...")
 
-            tags.append(tag.Tag("str", self.markup, self.line, inline = False, formatting ="%content%", no_inner_tags = True))
+            tags.append(tag.Tag("str", self.markup, inline = False, formatting ="%content%", no_inner_tags = True))
             
             return tags
         
@@ -123,7 +122,7 @@ class Lexer:
             self.advance()
 
         # return tag object.
-        return tag.Tag(id, content, self.line, attributes, inline = inline)
+        return tag.Tag(id, content, attributes, inline = inline)
 
     def generate_string(self):
         """
@@ -151,7 +150,7 @@ class Lexer:
 
         # return the string object
         # essentially just plain text
-        return tag.Tag("str", string, self.line, inline = False, formatting ="%content%", no_inner_tags = True)
+        return tag.Tag("str", string, inline = False, formatting ="%content%", no_inner_tags = True)
 
     def generate_comment(self, tags):
         """
@@ -171,7 +170,7 @@ class Lexer:
         
         if not settings.IGNORE_COMMENTS:
             tags.append(
-                tag.Tag('comment', content, self.line, inline = False, formatting ='<!--%content%-->', no_inner_tags = True))
+                tag.Tag('comment', content, inline = False, formatting ='<!--%content%-->', no_inner_tags = True))
             
     def generate_attributes(self) -> []:
         """
@@ -220,8 +219,7 @@ class Lexer:
 
         # skip to opening brace
         while self.current_char != settings.INNER_LEFT_BRACE:
-            if self.current_char == settings.SINGLE_LINE_TAG_INDICATOR[0] and self.equals_symbol(
-                    settings.SINGLE_LINE_TAG_INDICATOR):
+            if self.current_char == settings.SINGLE_LINE_TAG_INDICATOR[0] and self.equals_symbol(settings.SINGLE_LINE_TAG_INDICATOR):
                 return self.generate_single_line_tag()
 
             self.advance()

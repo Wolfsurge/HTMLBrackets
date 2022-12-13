@@ -6,7 +6,7 @@ html {
 
     body {
         h1 [class="header"] {
-            u > "Header!"
+            u -> "Header!"
         }
 
         p [class="paragraph"] {
@@ -19,6 +19,6 @@ html {
             }
         }
 
-        p > "Single lined tag!"
+        p -> "Single lined tag!"
     }
 }

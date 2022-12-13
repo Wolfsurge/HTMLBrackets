@@ -1,6 +1,5 @@
 import lexer
 import settings
-import pathlib
 
 def main() -> None:
     input_file = input("File name: \n> ") # "test/webpage.hbml" # "test/smooth-example/index.hbml"

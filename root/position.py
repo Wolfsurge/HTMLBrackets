@@ -25,4 +25,4 @@ class Position:
         Copies the current position to a new, separate object.
         :return: The copied position.
         """
-        return Position(self.index, self.line_number, self.column, self.content)
+        return Position(self.index_number, self.column, self.content)
