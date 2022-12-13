@@ -87,6 +87,8 @@ class Lexer:
         while self.current_char != None and self.current_char in tag_lists.VALID_CHARACTERS:
             id += self.current_char
             self.advance()
+            
+        forced_void = self.current_char == '*'
 
         # check if element is inline (doesn't need a closing tag)
         inline = id in tag_lists.INLINE_ELEMENTS
@@ -111,7 +113,7 @@ class Lexer:
             print(f'{id}\'s attributes: {attributes}')
 
         # add content if it isn't inline.
-        if not inline:
+        if not inline and not forced_void:
             if settings.DEBUG:
                 print(f'Generating content for {id}')
 
@@ -132,33 +134,12 @@ class Lexer:
 
         self.advance()
 
-        # temporarily exiting the string.
-        escape_character = False
-        escape_characters = {
-            'n': '\n',
-            't': '\t'
-        }
-
         quotation_marks = 1
 
         # we want to continue adding to the string
-        while self.current_char != None and (self.current_char != '"' or escape_character):
-            # we want to exit the string
-            if escape_character:
-                string += escape_characters.get(self.current_char, self.current_char)
-
-            else:
-                # \n, \t, etc...
-                if self.current_char == '\\':
-                    escape_character = True
-
-                # just add to the string
-                else:
-                    string += self.current_char
-
+        while self.current_char != None and self.current_char != '"':
+            string += self.current_char
             self.advance()
-
-            escape_character = False
 
         if self.current_char == '"':
             quotation_marks -= 1

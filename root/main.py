@@ -1,8 +1,9 @@
 import lexer
 import settings
+import pathlib
 
 def main() -> None:
-    input_file = input("File name: \n> ") # "test/webpage.hbml"
+    input_file = input("File name: \n> ") # "test/webpage.hbml" # "test/smooth-example/index.hbml"
 
     # generate html tags
     tags = lexer.Lexer(open(input_file, 'r').read()).make_tags()
@@ -30,7 +31,7 @@ def concatenate_tag_list(list: []) -> str:
     for t in list:
         output += t.generate_html()
 
-    return output
+    return output.replace('\n' if not settings.NEW_LINE_OUTPUT else '', '')
 
 if __name__ == '__main__':
     main()

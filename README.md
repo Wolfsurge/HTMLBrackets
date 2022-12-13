@@ -21,7 +21,7 @@ p {
 
 Alternatively, if there is only one line inside of the braces, we can use single line tags:
 ```
-p > "Single lined tag!"
+p -> "Single lined tag!"
 ```
 
 When you want to specify attributes, such as `class` or `href`, we use square braces:
@@ -78,7 +78,7 @@ html {
             }
         }
         
-        p > "Single lined tag!"
+        p -> "Single lined tag!"
     }
 }
 ```

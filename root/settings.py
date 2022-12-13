@@ -11,11 +11,16 @@ IGNORE_COMMENTS = True
 
 # The indicator for a single line tag
 # E.G.
-# a [href="link"] > "Anchor text"
-SINGLE_LINE_TAG_INDICATOR = '>'
+# a [href="link"] -> "Anchor text"
+SINGLE_LINE_TAG_INDICATOR = '->'
 
 # Whether to output messages about what the parser is currently doing
 DEBUG = False
 
 # Add new lines on the final output
-NEW_LINE_OUTPUT = False
+NEW_LINE_OUTPUT = True
+
+# Forces the given tag to not have any inner tags
+# E.G.
+# p*
+FORCE_NO_INNER_TAGS = '*'

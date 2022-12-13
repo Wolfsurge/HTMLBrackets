@@ -1,0 +1,36 @@
+html {
+    head {
+        title -> "Site Title"
+
+        ~ CSS
+        link [rel="stylesheet", href="style.css"]
+
+        ~ Fonts
+        link [rel="preconnect", href="https://fonts.googleapis.com"]
+        link [rel="preconnect", href="https://fonts.gstatic.com" crossorigin]
+        link [href="https://fonts.googleapis.com/css2?family=Inter:wght@200&family=Noto+Sans:wght@300&display=swap", rel="stylesheet"]
+    }
+
+    body {
+        div [class="header"] {
+            h1 -> "Site Title"
+            hr
+        }
+
+        div [class="content"] {
+            h2 -> "Paragraph Title"
+
+            p [class="paragraph"] {
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam sapien libero, ultricies id ullamcorper feugiat, laoreet et nunc. 
+				Nullam lacinia, ex a lacinia ultrices, urna nisi viverra nisl, eget tincidunt arcu magna at ex. Curabitur bibendum vel neque in finibus. 
+				Aenean ultrices ipsum vel odio volutpat suscipit. Nam porttitor gravida eros eu vestibulum. 
+				Pellentesque fringilla bibendum pulvinar. Nullam fringilla ante non mauris tincidunt fermentum. 
+				Vestibulum lorem elit, molestie rhoncus erat ac, luctus volutpat diam."
+            }
+        }
+
+		a [class="btn"] -> "Button Example"
+		
+		p*
+    }
+}
