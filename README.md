@@ -19,6 +19,11 @@ p {
 }
 ```
 
+Of course, you can have quotation marks inside of text, just add a backwards slash before it:
+```
+"\"Look! Quotation marks inside a string!\""
+```
+
 Alternatively, if there is only one line inside of the braces, we can use single line tags:
 ```
 p -> "Single lined tag!"
@@ -96,6 +101,8 @@ html {
         }
         
         p -> "Single lined tag!"
+        
+        p -> "\"Look! Quotation marks inside a string!\""
     }
 }
 ```

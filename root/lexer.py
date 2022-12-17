@@ -133,6 +133,9 @@ class Lexer:
 
         # we want to continue adding to the string
         while self.current_char != None and self.current_char != '"':
+            if self.current_char == '\\':
+                self.advance()
+
             string += self.current_char
             self.advance()
 
