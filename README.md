@@ -1,7 +1,7 @@
 # <u> HBML </u>
 Hyper Text Markup Language - but with braces.
 
-[Still a work in progress]
+(Still a work in progress)
 
 Use similar to HTML, but instead of using `< >` all the time, we use `{ }`.
 
@@ -26,10 +26,10 @@ p -> "Single lined tag!"
 
 When you want to specify attributes, such as `class` or `href`, we use square braces:
 ```
-p [class="paragraph"] {
+p (class="paragraph") {
     "Text inside the paragraph!"
     
-    a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+    a (href="https://github.com/Wolfsurge/HTMLBrackets") {
         "Anchor text!"
     }
 }
@@ -38,12 +38,12 @@ p [class="paragraph"] {
 Now, this would display the anchor next to the paragraph, without any spacing. So, lets use a `br` tag
 to separate them:
 ```
-p [class="paragraph"] {
+p (class="paragraph") {
     "Text inside the paragraph!"
     
     br
     
-    a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+    a (href="https://github.com/Wolfsurge/HTMLBrackets") {
         "Anchor text!"
     }
 }
@@ -51,7 +51,7 @@ p [class="paragraph"] {
 
 It also works with inline elements:
 ```
-link [rel="stylesheet", href="style.css"]
+link (rel="stylesheet", href="style.css")
 ```
 
 Comments can be declared with the '~' symbol:
@@ -63,17 +63,17 @@ So, all together, it would look like this, as `html`, `head`, and `body` tags al
 ```
 html {
     head {
-        link [rel="stylesheet", href="style.css"]
+        link (rel="stylesheet", href="style.css")
         ~ This is a comment!
     }
     
     body {
-        p [class="paragraph"] {
+        p (class="paragraph") {
             "Text inside the paragraph!"
             
             br
             
-            a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+            a (href="https://github.com/Wolfsurge/HTMLBrackets") {
                 "Anchor text!"
             }
         }

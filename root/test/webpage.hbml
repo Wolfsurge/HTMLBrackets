@@ -1,20 +1,20 @@
 html {
     head {
-        link [rel="stylesheet", href="style.css"]
+        link (rel="stylesheet", href="style.css", crossorigin)
         ~ This is a comment!
     }
 
     body {
-        h1 [class="header"] {
+        h1 (class="header") {
             u -> "Header!"
         }
 
-        p [class="paragraph"] {
+        p (class="paragraph") {
             "Text inside the paragraph!"
 
             br
 
-            a [href="https://github.com/Wolfsurge/HTMLBrackets"] {
+            a (href="https://github.com/Wolfsurge/HTMLBrackets") {
                 "Anchor text!"
             }
         }

@@ -41,7 +41,10 @@ class Tag:
 
             # add properties (href, class, etc...)
             for property in self.attributes:
-                final += f" {property[0].strip()}={property[1].strip()}"
+                final += f" {property[0].strip()}"
+
+                if property[1] != "":
+                    final += f"={property[1].strip()}"
 
             # add closing arrow
             final += f'{ "/" if self.inline else "" }>'

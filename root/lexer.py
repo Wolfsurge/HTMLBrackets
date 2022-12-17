@@ -65,7 +65,7 @@ class Lexer:
                 tags.append(self.generate_tag())
 
             else:
-                print("Invalid char detected")
+                print(f"Invalid char detected: '{self.current_char}'")
                 quit(-1)
 
         if self.brace_stack != 0:
@@ -177,36 +177,35 @@ class Lexer:
         Generates the attributes of a tag
         :return: A 2D array of attributes - name, and value.
         """
+        # content inside of braces
+        encapsulated_content = self.generate_content_inside(settings.ATTRIBUTE_LEFT_BRACE, settings.ATTRIBUTE_RIGHT_BRACE)
+
+        # the components that we have retrieved from the encapsulated content
+        split_components = []
+
+        if encapsulated_content != "":
+            split_components = encapsulated_content.split(settings.ATTRIBUTE_SEPARATOR)
+
+            # track index to reassign components
+            index = 0
+            for component in split_components:
+                # strip whitespaces from both ends
+                split_components[index] = component.strip()
+
+                index += 1
+
         attributes = []
 
-        # we are adding attributes
-        if self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
-            self.advance()
+        for component in split_components:
+            # split by assigner
+            split = component.split(settings.ATTRIBUTE_ASSIGNER)
 
-            # we haven't hit the end of our attributes
-            while self.current_char != settings.ATTRIBUTE_RIGHT_BRACE:
-                # whitespace or attribute separator
-                if self.current_char in " ,":
-                    self.advance()
+            # if there is only one element in the array, then we add a blank element to serve as the value
+            if len(split) == 1:
+                split.append("")
 
-                # attribute name
-                attribute_id = ""
-                while not self.current_char in "=":
-                    attribute_id += self.current_char
-                    self.advance()
-
-                self.advance()
-
-                # attribute value
-                value = ""
-
-                # we haven't reached a separator or an ending brace
-                while not self.current_char in [',', settings.ATTRIBUTE_RIGHT_BRACE]:
-                    value += self.current_char
-                    self.advance()
-
-                # add to list
-                attributes.append([attribute_id, value])
+            # add to attributes - name, value
+            attributes.append([split[0], split[1]])
 
         return attributes
 
@@ -274,8 +273,22 @@ class Lexer:
         current = ''
 
         # add char until we reach a whitespace
-        while self.current_char != None and self.current_char != ' ':
+        while self.current_char != None and self.current_char != ' ' and current in symbol:
             current += self.current_char
             self.advance()
 
         return current == symbol
+
+    def generate_content_inside(self, symbol_one: str, symbol_two: str) -> str:
+        encapsulated_content = ""
+
+        if self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
+            self.advance()
+
+            while self.current_char != settings.ATTRIBUTE_RIGHT_BRACE:
+                encapsulated_content += self.current_char
+                self.advance()
+
+            self.advance()
+
+        return encapsulated_content
