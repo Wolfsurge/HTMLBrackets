@@ -6,6 +6,10 @@ ATTRIBUTE_RIGHT_BRACE = ')'
 ATTRIBUTE_SEPARATOR = ','
 ATTRIBUTE_ASSIGNER = '='
 
+STYLE_SEPARATOR = '->'
+STYLE_LEFT_BRACE = '{'
+STYLE_RIGHT_BRACE = '}'
+
 COMMENT_INDICATOR = '~'
 
 # Completely disregards comments - does not add them to the HTML output

@@ -10,7 +10,6 @@ class Lexer:
 
         self.position = position.Position(-1, 0, -1, markup)
 
-        self.brace_stack = 0
         self.current_char = None
         self.advance()
 
@@ -18,12 +17,6 @@ class Lexer:
         """
         Advances the current position by 1.
         """
-        if self.current_char == settings.INNER_LEFT_BRACE or self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
-            self.brace_stack += 1
-
-        if self.current_char == settings.INNER_RIGHT_BRACE or self.current_char == settings.ATTRIBUTE_RIGHT_BRACE:
-            self.brace_stack -= 1
-
         self.position.advance(self.current_char)
         self.current_char = self.markup[self.position.index] if self.position.index < len(self.markup) else None
 
@@ -68,9 +61,6 @@ class Lexer:
                 print(f"Invalid char detected: '{self.current_char}'")
                 quit(-1)
 
-        if self.brace_stack != 0:
-            raise Exception(f"Brace {'overflow' if self.brace_stack > 0 else 'underflow'} by {self.brace_stack}")
-
         return tags
 
     def generate_tag(self):
@@ -95,9 +85,7 @@ class Lexer:
         if settings.DEBUG:
             print(f"{id} is {'inline' if inline else 'not inline'}")
 
-        # skip whitespaces
-        while self.current_char == ' ':
-            self.advance()
+        self.skip_whitespaces()
 
         # the content inside of the tag
         content = ''
@@ -117,6 +105,14 @@ class Lexer:
                 print(f'Generating content for {id}')
 
             content = self.generate_content()
+
+            self.advance()
+
+            self.skip_whitespaces()
+
+            if self.equals_symbol(settings.STYLE_SEPARATOR):
+                self.skip_until(settings.STYLE_LEFT_BRACE)
+                attributes.append(['style', f'"{self.generate_content_inside(settings.STYLE_LEFT_BRACE, settings.STYLE_RIGHT_BRACE).strip()}"'])
 
         if not inline or len(attributes) > 0:
             self.advance()
@@ -273,22 +269,50 @@ class Lexer:
         current = ''
 
         # add char until we reach a whitespace
-        while self.current_char != None and self.current_char != ' ' and current in symbol:
+        while self.current_char != None and self.current_char != ' ' and (current + self.current_char) in symbol:
             current += self.current_char
             self.advance()
 
         return current == symbol
 
     def generate_content_inside(self, symbol_one: str, symbol_two: str) -> str:
+        """
+        Gets the content inside of two given symbols
+        :param symbol_one: The opening symbol
+        :param symbol_two: The closing symbol
+        :return: The content inside of the two given symbols
+        """
         encapsulated_content = ""
 
-        if self.current_char == settings.ATTRIBUTE_LEFT_BRACE:
+        if self.current_char == symbol_one:
+            stack = 1
+
             self.advance()
 
-            while self.current_char != settings.ATTRIBUTE_RIGHT_BRACE:
+            while stack != 0:
+                if self.current_char == symbol_one:
+                    stack += 1
+                elif self.current_char == symbol_two:
+                    stack -= 1
+
                 encapsulated_content += self.current_char
                 self.advance()
 
             self.advance()
 
-        return encapsulated_content
+        return encapsulated_content[:-1]
+
+    def skip_whitespaces(self):
+        """
+        Skips characters until we meet a non-whitespace character
+        """
+        while self.current_char == ' ':
+            self.advance()
+
+    def skip_until(self, symbol: str):
+        """
+        Skips characters until we reach the given symbol
+        :param symbol: The symbol to break at
+        """
+        while self.current_char != symbol:
+            self.advance()

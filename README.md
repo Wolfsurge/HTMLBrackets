@@ -49,6 +49,21 @@ p (class="paragraph") {
 }
 ```
 
+You can add styling without a `style` attribute, if you want, through a '->' symbol after the closing tag:
+```
+p (class="paragraph") {
+    "Text inside the paragraph!"
+
+    br
+
+    a (href="https://github.com/Wolfsurge/HTMLBrackets") {
+        "Anchor text!"
+    }
+} -> {
+    color: blue;
+}
+```
+
 It also works with inline elements:
 ```
 link (rel="stylesheet", href="style.css")
@@ -76,6 +91,8 @@ html {
             a (href="https://github.com/Wolfsurge/HTMLBrackets") {
                 "Anchor text!"
             }
+        } -> {
+            color: blue;
         }
         
         p -> "Single lined tag!"

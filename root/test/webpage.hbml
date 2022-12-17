@@ -1,6 +1,6 @@
 html {
     head {
-        link (rel="stylesheet", href="style.css", crossorigin)
+        link (rel="stylesheet", href="style.css")
         ~ This is a comment!
     }
 
@@ -17,6 +17,8 @@ html {
             a (href="https://github.com/Wolfsurge/HTMLBrackets") {
                 "Anchor text!"
             }
+        } -> {
+            color: blue;
         }
 
         p -> "Single lined tag!"
