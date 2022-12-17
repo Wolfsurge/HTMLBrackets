@@ -2,11 +2,13 @@ import tag
 import position
 import tag_lists
 import settings
+import os
 
 class Lexer:
-    def __init__(self, markup, name = ""):
+    def __init__(self, markup, name = "", path = ""):
         self.markup = markup
         self.name = name
+        self.path = path
 
         self.position = position.Position(-1, 0, -1, markup)
 
@@ -31,7 +33,7 @@ class Lexer:
             if settings.DEBUG:
                 print("Excluded element found, overriding tag generation...")
 
-            tags.append(tag.Tag("str", self.markup, inline = False, formatting ="%content%", no_inner_tags = True))
+            tags.append(tag.Tag(self, "str", self.markup, inline = False, formatting ="%content%", no_inner_tags = True))
             
             return tags
         
@@ -55,7 +57,10 @@ class Lexer:
                 self.advance()
 
             elif self.current_char in tag_lists.VALID_CHARACTERS:
-                tags.append(self.generate_tag())
+                tag = self.generate_tag()
+
+                if tag != None:
+                    tags.append(tag)
 
             else:
                 print(f"Invalid char detected: '{self.current_char}'")
@@ -76,7 +81,10 @@ class Lexer:
         while self.current_char != None and self.current_char in tag_lists.VALID_CHARACTERS:
             id += self.current_char
             self.advance()
-            
+
+        if id == 'css':
+            return self.generate_css()
+
         forced_void = self.current_char == '*'
 
         # check if element is inline (doesn't need a closing tag)
@@ -118,7 +126,7 @@ class Lexer:
             self.advance()
 
         # return tag object.
-        return tag.Tag(id, content, attributes, inline = inline)
+        return tag.Tag(self, id, content, attributes, inline=inline)
 
     def generate_string(self):
         """
@@ -127,16 +135,29 @@ class Lexer:
         """
         string = ''
 
+        escape_sequences = {
+            '"': '"', # avoid cancelling string
+            'n': '<br />', # add new line
+            'r': '<br />', # return carriage, just for people who might be used to it?
+            't': '    ' # tab
+        }
+
         self.advance()
 
         quotation_marks = 1
 
         # we want to continue adding to the string
         while self.current_char != None and self.current_char != '"':
+            # character wants to enable escape sequence
             if self.current_char == '\\':
                 self.advance()
 
-            string += self.current_char
+                string += escape_sequences[self.current_char]
+
+            # just add
+            else:
+                string += self.current_char
+                
             self.advance()
 
         if self.current_char == '"':
@@ -149,7 +170,7 @@ class Lexer:
 
         # return the string object
         # essentially just plain text
-        return tag.Tag("str", string, inline = False, formatting ="%content%", no_inner_tags = True)
+        return tag.Tag(self, "str", string, inline = False, formatting ="%content%", no_inner_tags = True)
 
     def generate_comment(self, tags):
         """
@@ -169,7 +190,7 @@ class Lexer:
         
         if not settings.IGNORE_COMMENTS:
             tags.append(
-                tag.Tag('comment', content, inline = False, formatting ='<!--%content%-->', no_inner_tags = True))
+                tag.Tag(self, 'comment', content, inline = False, formatting ='<!--%content%-->', no_inner_tags = True))
             
     def generate_attributes(self) -> []:
         """
@@ -319,3 +340,30 @@ class Lexer:
         """
         while self.current_char != symbol:
             self.advance()
+
+    def generate_css(self):
+        if settings.DEBUG:
+            print("Generating CSS")
+
+        self.skip_whitespaces()
+        attributes = self.generate_attributes()
+
+        file_name = os.path.splitext(os.path.basename(self.path))[0]
+        file_extension = os.path.splitext(os.path.basename(self.path))[1]
+
+        has_name_attribute = len(list(filter(lambda array: array[0] == 'name', attributes))) > 0
+        name_attribute = ''
+
+        if has_name_attribute:
+            name_attribute = list(filter(lambda array: array[0] == 'name', attributes))[0][1].replace('"', '') + '.css'
+
+        name = name_attribute if has_name_attribute else f"{self.path.replace(os.path.dirname(self.path), '').replace(file_extension, '')}.style.css"
+
+        content = self.generate_content()
+        self.advance()
+
+        with open(f"{os.path.dirname(self.path)}/{name}", 'w') as file:
+            file.write(content)
+            file.close()
+
+        return tag.Tag(self, 'link', '', [['rel', '"stylesheet"'], ['href', f'"{name.removeprefix("/")}"']], inline=True)

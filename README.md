@@ -71,7 +71,7 @@ p (class="paragraph") {
 
 It also works with inline elements:
 ```
-link (rel="stylesheet", href="style.css")
+meta (charset="utf-8")
 ```
 
 Comments can be declared with the '~' symbol:
@@ -79,11 +79,46 @@ Comments can be declared with the '~' symbol:
 ~ This is a comment!
 ```
 
+Another thing - why would you want to write CSS and HTML in separate files?
+Well, HBML lets you have all the CSS you need - in one file! Just use the `css`
+tag inside the `head` tag!
+```
+css {
+    .header {
+        color: blue;
+        transition: 0.5s;
+    }
+
+    .header:hover {
+        color: cyan;
+        font-size: 50px;
+    }
+}
+```
+
+You can also specify the name of the file - just add a `name` attribute:
+```
+css (name="style.css")
+```
+
 So, all together, it would look like this, as `html`, `head`, and `body` tags also exist:
 ```
 html {
     head {
-        link (rel="stylesheet", href="style.css")
+        css {
+            .header {
+                color: blue;
+                transition: 0.5s;
+            }
+
+            .header:hover {
+                color: cyan;
+                font-size: 50px;
+            }
+        }
+        
+        meta (charset="utf-8")
+        
         ~ This is a comment!
     }
     

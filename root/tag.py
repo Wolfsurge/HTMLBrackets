@@ -2,7 +2,7 @@ import settings
 import lexer
 
 class Tag:
-    def __init__(self, name, content, attributes = [], inline = False, formatting = None, no_inner_tags = False):
+    def __init__(self, parent_lexer, name, content, attributes = [], inline = False, formatting = None, no_inner_tags = False):
         self.name = name
         self.content = content
         self.attributes = attributes
@@ -15,7 +15,7 @@ class Tag:
         # this is because comments and other elements also use this tag system,
         # but they obviously can't have inner elements.
         if not self.no_inner_tags:
-            self.inner_tags = lexer.Lexer(content, name).make_tags()
+            self.inner_tags = lexer.Lexer(content, name, parent_lexer.path).make_tags()
 
             if self.inner_tags == None:
                 self.inner_tags = []

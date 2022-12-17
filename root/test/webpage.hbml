@@ -1,6 +1,19 @@
 html {
     head {
-        link (rel="stylesheet", href="style.css")
+        css {
+            .header {
+                color: blue;
+                transition: 0.5s;
+            }
+
+            .header:hover {
+                color: cyan;
+                font-size: 50px;
+            }
+        }
+
+        meta (charset="utf-8")
+
         ~ This is a comment!
     }
 

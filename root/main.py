@@ -1,11 +1,13 @@
 import lexer
 import settings
+import os
 
 def main() -> None:
     input_file = input("File name: \n> ") # "test/webpage.hbml" # "test/smooth-example/index.hbml"
+    file = open(input_file, 'r')
 
     # generate html tags
-    tags = lexer.Lexer(open(input_file, 'r').read()).make_tags()
+    tags = lexer.Lexer(file.read(), path=file.name).make_tags()
 
     if settings.DEBUG:
         print("Writing HTML output to file...")
